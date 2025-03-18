@@ -7,7 +7,6 @@ import java.util.stream.Stream;
 
 
 public class TestDataProvider {
-
     static Stream<Arguments> provideAdditionData(){
         return Stream.of(
                 Arguments.of(1, 2, 3),

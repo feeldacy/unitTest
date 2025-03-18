@@ -17,34 +17,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class KalkulatorTest {
 
-    @Order(1)
-    @ParameterizedTest
-    @MethodSource("org.example.TestDataProvider#provideAdditionData")
-    void testAdditionData(int a, int b, int expected){
-        Kalkulator calc = new Kalkulator();
-        assertEquals(expected, calc.add(a, b));
-    }
-
-    static List<String> provideArrayArguments(){
-        List<String> lists = new ArrayList<>();
-        lists.add("abc");
-        lists.add("dfg");
-        lists.add("rgh");
-
-        return lists;
-    }
-
-    static Stream<List<String>> provideArrayData(){
-        return Stream.of(
-                Arrays.asList("abc", "def", "ghj"),
-                Arrays.asList("wje", "awo", "euo")
-        );
-    }
-
-    @ParameterizedTest
-    @MethodSource("provideArrayArguments")
-
-
     @BeforeAll
     static void setupClass(){
         System.out.println("before all");
@@ -112,7 +84,8 @@ class KalkulatorTest {
             "1,2,3",
             "2,3,5",
             "-1, 0, -1",
-            "10, 20, 30"
+            "10, 20, 30",
+            "-3, 5, 2",
     })
     void testAddition(int a, int b, int expected){
         Kalkulator calc = new Kalkulator();
@@ -121,7 +94,7 @@ class KalkulatorTest {
 
 
     @ParameterizedTest
-    @ValueSource(ints = {2, 4, 5, 7, 8, 13})
+    @ValueSource(ints = {2, 4, 5, -7, -8, 13, 0})
     void testEven(int num){
         Kalkulator calc = new Kalkulator();
         assertTrue(calc.isEven(num));
@@ -134,6 +107,50 @@ class KalkulatorTest {
         Kalkulator calc = new Kalkulator();
         assertTrue(calc.containsA(word));
     }
+
+
+    @Order(1)
+    @ParameterizedTest
+    @MethodSource("org.example.TestDataProvider#provideAdditionData")
+    void testAdditionData(int a, int b, int expected){
+        Kalkulator calc = new Kalkulator();
+        assertEquals(expected, calc.add(a, b));
+    }
+
+    static List<String> provideArrayArguments(){
+        List<String> lists = new ArrayList<>();
+        lists.add("abc");
+        lists.add("dfg");
+        lists.add("rgh");
+
+        return lists;
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideArrayArguments")
+    void testContainsAUsingMethodSource(String word){
+        Kalkulator calc = new Kalkulator();
+        assertTrue(calc.containsA(word));
+    }
+
+    static Stream<List<Integer>> provideArrayData(){
+        return Stream.of(
+                Arrays.asList(1, 2, 3),
+                Arrays.asList(-5, -3, -8)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideArrayData")
+    void testAdditionDataUsingMethodSource(List<Integer> data){
+        Kalkulator calc = new Kalkulator();
+        int a = data.get(0);
+        int b = data.get(1);
+        int expected = data.get(2);
+        assertEquals(expected, calc.add(a, b));
+    }
+
+
 
 
 }
